@@ -9,6 +9,9 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
+// ******************* COMPONENT *******************
+// ******************* COMPONENT *******************
+// ******************* COMPONENT *******************
 export default function CartItem({
   item,
   onDelete,
@@ -18,7 +21,9 @@ export default function CartItem({
   const [loading, setLoading] = useState(true);
 
   return (
+    // ******************* CONTAINER *******************
     <TouchableOpacity style={styles.card} onPress={onPress}>
+      {/* ******************* PRODUCT IMAGE + LOADER ******************* */}
       <View style={styles.imageWrapper}>
         {loading && (
           <View style={styles.loader}>
@@ -32,11 +37,14 @@ export default function CartItem({
         />
       </View>
 
+      {/* ******************* PRODUCT INFO ******************* */}
       <View style={styles.info}>
         <Text style={styles.title} numberOfLines={2}>
           {item.title}
         </Text>
         <Text style={styles.price}>Price: €{item.price}</Text>
+
+        {/* ******************* QUANTITY CONTROLS ******************* */}
         <View style={styles.controls}>
           <TouchableOpacity onPress={() => onChangeQuantity(item.id, -1)}>
             <Ionicons name="remove-circle-outline" size={24} color="#4B2E83" />
@@ -57,7 +65,11 @@ export default function CartItem({
   );
 }
 
+// ******************* STYLING *******************
+// ******************* STYLING *******************
+// ******************* STYLING *******************
 const styles = StyleSheet.create({
+  // ******************* CONTAINER *******************
   card: {
     flexDirection: "row",
     marginBottom: 16,
@@ -66,25 +78,31 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     elevation: 2,
   },
+  // ******************* PRODUCT IMAGE *******************
   image: {
     width: 100,
     height: 100,
     resizeMode: "contain",
     backgroundColor: "#fff",
+    position: "absolute",
   },
+  // ******************* PRODUCT INFO *******************
   info: {
     flex: 1,
     padding: 12,
     justifyContent: "space-around",
   },
+  // ******************* PRODUCT TITLE *******************
   title: {
     fontSize: 14,
     fontWeight: "bold",
   },
+  // ******************* PRODUCT PRICE *******************
   price: {
     fontSize: 14,
     color: "#333",
   },
+  // ******************* QUANTITY CONTROLS *******************
   controls: {
     flexDirection: "row",
     alignItems: "center",
@@ -95,10 +113,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginHorizontal: 8,
   },
+  // ******************* DELETE BUTTON *******************
   deleteBtn: {
     marginLeft: "auto",
     paddingHorizontal: 8,
   },
+  // ******************* IMAGE WRAPPER *******************
   imageWrapper: {
     width: 100,
     height: 100,
@@ -106,12 +126,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  image: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "contain",
-    position: "absolute",
-  },
+  // ******************* LOADER *******************
   loader: {
     position: "absolute",
     zIndex: 1,
