@@ -7,9 +7,15 @@ import CartTotal from "../components/CartTotal";
 import CartItem from "../components/CartItem";
 import { navigateTo } from "../utils/navigation";
 
+// ******************* COMPONENT *******************
+// ******************* COMPONENT *******************
+// ******************* COMPONENT *******************
 export default function CartScreen() {
   const [cart, setCart] = useState([]);
 
+  // ******************* LOAD CART *******************
+  // ******************* LOAD CART *******************
+  // ******************* LOAD CART *******************
   useFocusEffect(
     useCallback(() => {
       const loadCart = async () => {
@@ -22,6 +28,9 @@ export default function CartScreen() {
     }, [])
   );
 
+  // ******************* UPDATE QUANTITY *******************
+  // ******************* UPDATE QUANTITY *******************
+  // ******************* UPDATE QUANTITY *******************
   const updateQuantity = useCallback(
     async (id, change) => {
       const updatedCart = cart.map((item) => {
@@ -37,6 +46,9 @@ export default function CartScreen() {
     [cart]
   );
 
+  // ******************* DELETE ITEM *******************
+  // ******************* DELETE ITEM *******************
+  // ******************* DELETE ITEM *******************
   const deleteItem = useCallback(
     async (id) => {
       const filteredCart = cart.filter((item) => item.id !== id);
@@ -46,6 +58,9 @@ export default function CartScreen() {
     [cart]
   );
 
+  // ******************* RENDER ITEM *******************
+  // ******************* RENDER ITEM *******************
+  // ******************* RENDER ITEM *******************
   const renderItem = ({ item }) => (
     <CartItem
       item={item}
@@ -55,14 +70,17 @@ export default function CartScreen() {
     />
   );
 
+  // ******************* RENDER *******************
   return (
     <Layout>
       {cart.length === 0 ? (
+        // ******************* EMPTY CART *******************
         <View style={styles.emptyContainer}>
-          <Text style={styles.empty}>Je winkelmandje is leeg</Text>
+          <Text style={styles.empty}>You bag is empty.</Text>
         </View>
       ) : (
         <>
+        {/* ******************* CART ITEMS ******************* */}
           <FlatList
             data={cart}
             keyExtractor={(item) => item.id.toString()}
@@ -76,17 +94,23 @@ export default function CartScreen() {
   );
 }
 
+// ******************* STYLING *******************
+// ******************* STYLES *******************
+// ******************* STYLES *******************
 const styles = StyleSheet.create({
+  // ******************* CONTAINER *******************
   container: {
     flex: 1,
     paddingHorizontal: 16,
     backgroundColor: "#fff",
   },
+  // ******************* EMPTY CART *******************
   emptyContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
+  // ******************* EMPTY CART TEXT *******************
   empty: {
     fontSize: 18,
     color: "#777",
