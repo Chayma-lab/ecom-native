@@ -1,6 +1,9 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
+// ******************* COMPONENT *******************
+// ******************* COMPONENT *******************
+// ******************* COMPONENT *******************
 export default function CartTotal({ cart }) {
   const total = cart.reduce((sum, item) => {
     const quantity = item.quantity || 1;
@@ -16,7 +19,11 @@ export default function CartTotal({ cart }) {
   );
 }
 
+// ******************* STYLES *******************
+// ******************* STYLES *******************
+// ******************* STYLES *******************
 const styles = StyleSheet.create({
+  // ******************* CONTAINER *******************
   container: {
     position: "absolute",
     bottom: 0,
@@ -29,6 +36,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
+  // ******************* LABEL AND AMOUNT *******************
   label: {
     fontWeight: "bold",
     fontSize: 16,
