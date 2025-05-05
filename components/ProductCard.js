@@ -9,11 +9,18 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
+// ******************* COMPONENT *******************
+// ******************* COMPONENT *******************
+// ******************* COMPONENT *******************
 export default function ProductCard({ product, onPress, onAddToCart }) {
   const [loading, setLoading] = useState(true);
 
   return (
+    // ******************* CONTAINER *******************
+    // ******************* CONTAINER *******************
+    // ******************* CONTAINER *******************
     <View style={styles.card}>
+      {/* ******************* PRODUCT IMAGE + LOADER ******************* */}
       <TouchableOpacity onPress={onPress}>
         <View style={styles.imageWrapper}>
           {loading && (
@@ -30,15 +37,18 @@ export default function ProductCard({ product, onPress, onAddToCart }) {
           />
         </View>
 
+        {/* ******************* PRODUCT INFO ******************* */}
         <View style={styles.content}>
           <Text style={styles.title} numberOfLines={2}>
             {product.title}
           </Text>
 
+          {/* ******************* PRODUCT CHIP ******************* */}
           <View style={styles.chip}>
             <Text style={styles.chipText}>{product.category}</Text>
           </View>
 
+          {/* ******************* PRODUCT PRICE + RATING ******************* */}
           <Text style={styles.price}>€ {product.price}</Text>
 
           <View style={styles.ratingRow}>
@@ -50,6 +60,7 @@ export default function ProductCard({ product, onPress, onAddToCart }) {
         </View>
       </TouchableOpacity>
 
+      {/* ******************* ADD TO CART BUTTON ******************* */}
       <TouchableOpacity style={styles.cartButton} onPress={onAddToCart}>
         <Ionicons name="cart-outline" size={16} color={"#fff"} />
         <Text style={styles.cartButtonText}>Add to cart</Text>
@@ -58,7 +69,11 @@ export default function ProductCard({ product, onPress, onAddToCart }) {
   );
 }
 
+// ******************* STYLES *******************
+// ******************* STYLES *******************
+// ******************* STYLES *******************
 const styles = StyleSheet.create({
+  // ******************* CARD *******************
   card: {
     borderRadius: 16,
     backgroundColor: "#f9f9f9",
@@ -66,6 +81,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     elevation: 2,
   },
+  // ******************* PRODUCT IMAGE + LOADER *******************
   imageWrapper: {
     width: "100%",
     height: 200,
@@ -83,6 +99,7 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
     backgroundColor: "#fff",
   },
+  // ******************* PRODUCT INFO *******************
   content: {
     padding: 12,
   },
@@ -91,6 +108,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 4,
   },
+  // ******************* PRODUCT CHIP *******************
   chip: {
     backgroundColor: "#e0e0e0",
     alignSelf: "flex-start",
@@ -103,6 +121,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#444",
   },
+  // ******************* PRODUCT PRICE + RATING *******************
   price: {
     fontSize: 16,
     fontWeight: "600",
@@ -117,6 +136,7 @@ const styles = StyleSheet.create({
     marginLeft: 4,
     color: "darkred",
   },
+  // ******************* ADD TO CART BUTTON *******************
   cartButton: {
     flexDirection: "row",
     alignItems: "center",
