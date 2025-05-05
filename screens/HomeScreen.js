@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {
-  Text,
-  FlatList,
-  StyleSheet,
-} from "react-native";
+import { Text, FlatList, StyleSheet } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Layout from "../components/Layout";
 import ProductCard from "../components/ProductCard";
 import SearchBar from "../components/SearchBar";
@@ -12,7 +9,7 @@ import { addToCart } from "../utils/addToCart";
 // ******************* COMPONENT *******************
 // ******************* COMPONENT *******************
 // ******************* COMPONENT *******************
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen({ navigation, setCartCount }) {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
 
@@ -33,8 +30,13 @@ export default function HomeScreen({ navigation }) {
   // ******************* ADD TO CART *******************
   const handleAdd = async (product) => {
     const success = await addToCart(product);
-    if (success) alert("Added to cart!");
-  };
+    if (success) {  
+      const saved = await AsyncStorage.getItem("cart");
+      const cart = saved ? JSON.parse(saved) : [];
+      const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+      setCartCount(totalItems);
+    }
+  };  
 
   // ******************* FILTER PRODUCTS *******************
   const filteredProducts = products.filter((p) =>
