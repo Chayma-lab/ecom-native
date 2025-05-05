@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
-  View,
   Text,
   FlatList,
-  TextInput,
-  Image,
   StyleSheet,
 } from "react-native";
 import Layout from "../components/Layout";
@@ -12,10 +9,15 @@ import ProductCard from "../components/ProductCard";
 import SearchBar from "../components/SearchBar";
 import { addToCart } from "../utils/addToCart";
 
+// ******************* COMPONENT *******************
+// ******************* COMPONENT *******************
+// ******************* COMPONENT *******************
 export default function HomeScreen({ navigation }) {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
 
+  // ******************* FETCH PRODUCTS *******************
+  // ******************* LOAD PRODUCTS *******************
   useEffect(() => {
     fetch("https://fakestoreapi.com/products")
       .then((res) => {
@@ -28,24 +30,27 @@ export default function HomeScreen({ navigation }) {
       });
   }, []);
 
+  // ******************* ADD TO CART *******************
   const handleAdd = async (product) => {
     const success = await addToCart(product);
-    if (success) alert("Toegevoegd aan winkelmandje!");
+    if (success) alert("Added to cart!");
   };
 
+  // ******************* FILTER PRODUCTS *******************
   const filteredProducts = products.filter((p) =>
     p.title.toLowerCase().includes(search.toLowerCase())
   );
 
+  // ******************* RENDER *******************
   return (
     <Layout>
-      {/* Titel */}
+      {/* ******************** TITLE ******************* */}
       <Text style={styles.title}>My ecom</Text>
 
-      {/* Zoekbalk */}
+      {/* ******************** SEARCHBAR ******************* */}
       <SearchBar value={search} onChange={setSearch} />
 
-      {/* Productlijst */}
+      {/* ******************** PRODUCTS ******************* */}
       <FlatList
         data={filteredProducts}
         keyExtractor={(item) => item.id.toString()}
@@ -62,7 +67,11 @@ export default function HomeScreen({ navigation }) {
   );
 }
 
+// ******************* STYLES *******************
+// ******************* STYLES *******************
+// ******************* STYLES *******************
 const styles = StyleSheet.create({
+  // ******************* TITLE *******************
   title: {
     fontSize: 22,
     fontWeight: "bold",
@@ -71,6 +80,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     marginTop: 10,
   },
+  // ******************* SEARCHBAR *******************
   search: {
     backgroundColor: "#eee",
     paddingHorizontal: 12,
@@ -78,11 +88,5 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 16,
     marginHorizontal: 16,
-  },
-  banner: {
-    width: "100%",
-    height: 180,
-    marginBottom: 20,
-    borderRadius: 12,
   },
 });
