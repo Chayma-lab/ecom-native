@@ -5,18 +5,27 @@ import Layout from "../components/Layout";
 import { addToCart } from "../utils/addToCart";
 import { navigateTo } from "../utils/navigation";
 
+// ******************* COMPONENT *******************
+// ******************* COMPONENT *******************
+// ******************* COMPONENT *******************
 export default function DetailScreen({ route, navigation }) {
   const { product } = route.params;
 
+  // ******************* ADD TO CART *******************
   const handleAdd = async () => {
     const success = await addToCart(product);
-    if (success) alert("Toegevoegd aan winkelmandje!");
+    if (success) alert("Added to cart!");
   };
 
   return (
+    // ******************* CONTAINER *******************
+    // ******************* CONTAINER *******************
+    // ******************* CONTAINER *******************
     <Layout contentContainerStyle={styles.container}>
+      {/* ******************* PRODUCT IMAGE ******************* */}
       <Image source={{ uri: product.image }} style={styles.image} />
 
+      {/* ******************* PRODUCT INFO ******************* */}
       <View style={styles.content}>
         <Text style={styles.title}>{product.title}</Text>
 
@@ -27,6 +36,7 @@ export default function DetailScreen({ route, navigation }) {
         <Text style={styles.price}>€{product.price}</Text>
         <Text style={styles.description}>{product.description}</Text>
 
+        {/* ******************* BUTTONS ******************* */}
         <TouchableOpacity style={styles.button} onPress={handleAdd}>
           <Ionicons name="cart-outline" size={18} color="#fff" />
           <Text style={styles.buttonText}>Put it in the bag</Text>
@@ -46,12 +56,17 @@ export default function DetailScreen({ route, navigation }) {
   );
 }
 
+// ******************* STYLES *******************
+// ******************* STYLES *******************
+// ******************* STYLES *******************
 const styles = StyleSheet.create({
+  // ******************* CONTAINER *******************
   container: {
     padding: 20,
     backgroundColor: "#fff",
     alignItems: "center",
   },
+  // ******************* PRODUCT IMAGE *******************
   image: {
     width: 250,
     height: 250,
@@ -59,6 +74,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignSelf: "center",
   },
+  // ******************* PRODUCT INFO *******************
   content: {
     marginTop: 16,
     width: "100%",
@@ -92,6 +108,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     lineHeight: 20,
   },
+  // ******************* BUTTONS *******************
   button: {
     flexDirection: "row",
     backgroundColor: "#4B2E83",
