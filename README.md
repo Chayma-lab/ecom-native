@@ -97,7 +97,7 @@ npm install
 npx expo start
 ```
 
-Na het uitvoeren van npx expo start verschijnt er een QR-code in de terminal of in een browservenster.
+### Na het uitvoeren van npx expo start verschijnt er een QR-code in de terminal of in een browservenster.
 
 1. Open de Expo Go app op je smartphone
 2. Scan de QR-code
