@@ -14,8 +14,8 @@ import { Ionicons } from "@expo/vector-icons";
 // ******************* COMPONENT *******************
 export default function CartItem({
   item,
-  onDelete,
   onChangeQuantity,
+  onDelete,
   onPress,
 }) {
   const [loading, setLoading] = useState(true);

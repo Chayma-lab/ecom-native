@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
@@ -10,7 +10,7 @@ import { navigateTo } from "../utils/navigation";
 // ******************* COMPONENT *******************
 // ******************* COMPONENT *******************
 // ******************* COMPONENT *******************
-export default function CartScreen() {
+export default function CartScreen( {setCartCount}) {
   const [cart, setCart] = useState([]);
 
   // ******************* LOAD CART *******************
@@ -40,23 +40,30 @@ export default function CartScreen() {
         }
         return item;
       });
+  
       setCart(updatedCart);
       await AsyncStorage.setItem("cart", JSON.stringify(updatedCart));
+  
+      // Update the cart count
+      const totalItems = updatedCart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+      setCartCount(totalItems);
     },
-    [cart]
+    [cart, setCart, setCartCount]
   );
 
   // ******************* DELETE ITEM *******************
   // ******************* DELETE ITEM *******************
   // ******************* DELETE ITEM *******************
-  const deleteItem = useCallback(
-    async (id) => {
-      const filteredCart = cart.filter((item) => item.id !== id);
-      setCart(filteredCart);
-      await AsyncStorage.setItem("cart", JSON.stringify(filteredCart));
-    },
-    [cart]
-  );
+  const deleteItem = useCallback(async (id) => {
+    const filteredCart = cart.filter((item) => item.id !== id);
+    setCart(filteredCart);
+    await AsyncStorage.setItem("cart", JSON.stringify(filteredCart));
+  
+    // Update the cart count
+    const totalItems = filteredCart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    setCartCount(totalItems);
+  }, [cart, setCart, setCartCount]);
+
 
   // ******************* RENDER ITEM *******************
   // ******************* RENDER ITEM *******************
@@ -80,7 +87,7 @@ export default function CartScreen() {
         </View>
       ) : (
         <>
-        {/* ******************* CART ITEMS ******************* */}
+          {/* ******************* CART ITEMS ******************* */}
           <FlatList
             data={cart}
             keyExtractor={(item) => item.id.toString()}

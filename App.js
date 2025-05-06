@@ -33,7 +33,9 @@ function TabNavigator({ cartCount, setCartCount }) {
       />
       <Tab.Screen
         name="Cart"
-        component={CartScreen}
+        children={(props) => (
+          <CartScreen {...props} setCartCount={setCartCount} />
+        )}
         options={{
           tabBarBadge: cartCount > 0 ? cartCount : undefined,
         }}
@@ -68,10 +70,7 @@ export default function App() {
             name="Tabs"
             options={{ headerShown: false }}
             children={() => (
-              <TabNavigator
-                cartCount={cartCount}
-                setCartCount={setCartCount}
-              />
+              <TabNavigator cartCount={cartCount} setCartCount={setCartCount} />
             )}
           />
           <Stack.Screen
