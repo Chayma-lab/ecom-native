@@ -10,7 +10,7 @@ import { navigateTo } from "../utils/navigation";
 // ******************* COMPONENT *******************
 // ******************* COMPONENT *******************
 // ******************* COMPONENT *******************
-export default function CartScreen( {setCartCount}) {
+export default function CartScreen({ setCartCount }) {
   const [cart, setCart] = useState([]);
 
   // ******************* LOAD CART *******************
@@ -40,12 +40,15 @@ export default function CartScreen( {setCartCount}) {
         }
         return item;
       });
-  
+
       setCart(updatedCart);
       await AsyncStorage.setItem("cart", JSON.stringify(updatedCart));
-  
+
       // Update the cart count
-      const totalItems = updatedCart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+      const totalItems = updatedCart.reduce(
+        (sum, item) => sum + (item.quantity || 1),
+        0
+      );
       setCartCount(totalItems);
     },
     [cart, setCart, setCartCount]
@@ -54,16 +57,21 @@ export default function CartScreen( {setCartCount}) {
   // ******************* DELETE ITEM *******************
   // ******************* DELETE ITEM *******************
   // ******************* DELETE ITEM *******************
-  const deleteItem = useCallback(async (id) => {
-    const filteredCart = cart.filter((item) => item.id !== id);
-    setCart(filteredCart);
-    await AsyncStorage.setItem("cart", JSON.stringify(filteredCart));
-  
-    // Update the cart count
-    const totalItems = filteredCart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-    setCartCount(totalItems);
-  }, [cart, setCart, setCartCount]);
+  const deleteItem = useCallback(
+    async (id) => {
+      const filteredCart = cart.filter((item) => item.id !== id);
+      setCart(filteredCart);
+      await AsyncStorage.setItem("cart", JSON.stringify(filteredCart));
 
+      // Update the cart count
+      const totalItems = filteredCart.reduce(
+        (sum, item) => sum + (item.quantity || 1),
+        0
+      );
+      setCartCount(totalItems);
+    },
+    [cart, setCart, setCartCount]
+  );
 
   // ******************* RENDER ITEM *******************
   // ******************* RENDER ITEM *******************
@@ -79,7 +87,7 @@ export default function CartScreen( {setCartCount}) {
 
   // ******************* RENDER *******************
   return (
-    <Layout>
+    <Layout style={styles.container}>
       {cart.length === 0 ? (
         // ******************* EMPTY CART *******************
         <View style={styles.emptyContainer}>
@@ -108,6 +116,7 @@ const styles = StyleSheet.create({
   // ******************* CONTAINER *******************
   container: {
     flex: 1,
+    marginTop: 16,
     paddingHorizontal: 16,
     backgroundColor: "#fff",
   },

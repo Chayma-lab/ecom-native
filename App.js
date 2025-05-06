@@ -10,6 +10,7 @@ import { navigationRef } from "./utils/navigation";
 import HomeScreen from "./screens/HomeScreen";
 import DetailScreen from "./screens/DetailScreen";
 import CartScreen from "./screens/CartScreen";
+import PerformanceTestScreen from "./screens/PerformanceTestScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -20,7 +21,14 @@ function TabNavigator({ cartCount, setCartCount }) {
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarIcon: ({ color, size }) => {
-          let iconName = route.name === "Home" ? "home" : "cart";
+          let iconName;
+          if (route.name === "Home") {
+            iconName = "home";
+          } else if (route.name === "Cart") {
+            iconName = "cart";
+          } else if (route.name === "PerformanceTest") {
+            iconName = "speedometer";
+          }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
       })}
@@ -38,6 +46,13 @@ function TabNavigator({ cartCount, setCartCount }) {
         )}
         options={{
           tabBarBadge: cartCount > 0 ? cartCount : undefined,
+        }}
+      />
+      <Tab.Screen
+        name="PerformanceTest"
+        component={PerformanceTestScreen}
+        options={{
+          tabBarLabel: "Performance",
         }}
       />
     </Tab.Navigator>
@@ -78,6 +93,10 @@ export default function App() {
             children={(props) => (
               <DetailScreen {...props} setCartCount={setCartCount} />
             )}
+          />
+          <Stack.Screen
+            name="PerformanceTest"
+            component={PerformanceTestScreen}
           />
         </Stack.Navigator>
       </NavigationContainer>
