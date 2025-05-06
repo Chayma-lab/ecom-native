@@ -95,3 +95,12 @@ git clone https://github.com/Chayma-lab/ecom-native.git
 cd ecom-native
 npm install
 npx expo start
+```
+
+Na het uitvoeren van npx expo start verschijnt er een QR-code in de terminal of in een browservenster.
+
+1. Open de Expo Go app op je smartphone
+2. Scan de QR-code
+3. De app wordt direct geladen op je toestel
+
+💡 Tip: zet je toestel in vliegtuigmodus om offline gedrag te testen.
