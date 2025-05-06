@@ -80,3 +80,18 @@ ECOM-NATIVE/
 ├── app.json                      # Expo-configuratie
 ├── index.js                      # App startpunt
 └── .gitignore
+```
+## ▶️ App uitvoeren (Native – React Native via Expo)
+
+### Vereisten:
+- Node.js
+- Expo CLI (`npm install -g expo-cli`)
+- Expo Go app op je smartphone (iOS of Android)
+
+### Stappen om de app te runnen:
+
+```bash
+git clone https://github.com/Chayma-lab/ecom-native.git
+cd ecom-native
+npm install
+npx expo start
