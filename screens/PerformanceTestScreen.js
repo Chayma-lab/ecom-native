@@ -11,6 +11,9 @@ import { Ionicons } from "@expo/vector-icons";
 import NetInfo from "@react-native-community/netinfo";
 import Layout from "../components/Layout";
 
+// ******************* DATA *******************
+// ******************* DATA *******************
+// ******************* DATA *******************
 const startTime = Date.now();
 
 export default function PerformanceTestScreen() {
@@ -29,6 +32,7 @@ export default function PerformanceTestScreen() {
     return () => unsubscribe();
   }, []);
 
+  // ******************* INTERACTION *******************
   const handleTestInteraction = () => {
     const before = Date.now();
     setTimeout(() => {
@@ -37,6 +41,7 @@ export default function PerformanceTestScreen() {
     }, 0);
   };
 
+  // ******************* SRT *******************
   const srt =
     startupTime !== null && interactionTime !== null
       ? startupTime + interactionTime
@@ -44,9 +49,10 @@ export default function PerformanceTestScreen() {
 
   return (
     <Layout style={styles.container}>
-      <Text style={styles.title}>📱 Performance Test</Text>
+      <Text style={styles.title}>Performance Test</Text>
 
       <View style={styles.card}>
+        {/* ******************* PERFORMANCE DATA ******************* */}
         <View style={styles.row}>
           <Text style={styles.label}>📦 Platform:</Text>
           <Text style={styles.value}>{Platform.OS}</Text>

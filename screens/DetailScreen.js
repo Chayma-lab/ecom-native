@@ -6,10 +6,10 @@ import Layout from "../components/Layout";
 import { addToCart } from "../utils/addToCart";
 import { navigateTo } from "../utils/navigation";
 
-// ******************* COMPONENT *******************
-// ******************* COMPONENT *******************
-// ******************* COMPONENT *******************
 export default function DetailScreen({ route, setCartCount }) {
+  // ******************* PRODUCT DATA *******************
+  // ******************* PRODUCT DATA *******************
+  // ******************* PRODUCT DATA *******************
   const { product } = route.params;
 
   // ******************* ADD TO CART *******************

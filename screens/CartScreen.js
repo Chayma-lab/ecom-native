@@ -7,10 +7,10 @@ import CartTotal from "../components/CartTotal";
 import CartItem from "../components/CartItem";
 import { navigateTo } from "../utils/navigation";
 
-// ******************* COMPONENT *******************
-// ******************* COMPONENT *******************
-// ******************* COMPONENT *******************
 export default function CartScreen({ setCartCount }) {
+  // ******************* STATE *******************
+  // ******************* STATE *******************
+  // ******************* STATE *******************
   const [cart, setCart] = useState([]);
 
   // ******************* LOAD CART *******************

@@ -6,10 +6,10 @@ import ProductCard from "../components/ProductCard";
 import SearchBar from "../components/SearchBar";
 import { addToCart } from "../utils/addToCart";
 
-// ******************* COMPONENT *******************
-// ******************* COMPONENT *******************
-// ******************* COMPONENT *******************
 export default function HomeScreen({ navigation, setCartCount }) {
+  // ******************* STATE *******************
+  // ******************* STATE *******************
+  // ******************* STATE *******************
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
 
