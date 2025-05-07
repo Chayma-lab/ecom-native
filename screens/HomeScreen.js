@@ -4,6 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Layout from "../components/Layout";
 import ProductCard from "../components/ProductCard";
 import SearchBar from "../components/SearchBar";
+import ProductPlaceholder from "../components/ProductPlaceholder";
 import { addToCart } from "../utils/addToCart";
 
 export default function HomeScreen({ navigation, setCartCount }) {
@@ -12,6 +13,7 @@ export default function HomeScreen({ navigation, setCartCount }) {
   // ******************* STATE *******************
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   // ******************* FETCH PRODUCTS *******************
   // ******************* LOAD PRODUCTS *******************
@@ -24,19 +26,23 @@ export default function HomeScreen({ navigation, setCartCount }) {
       .then(setProducts)
       .catch((error) => {
         console.error("Fout bij ophalen producten:", error);
-      });
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   // ******************* ADD TO CART *******************
   const handleAdd = async (product) => {
     const success = await addToCart(product);
-    if (success) {  
+    if (success) {
       const saved = await AsyncStorage.getItem("cart");
       const cart = saved ? JSON.parse(saved) : [];
-      const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+      const totalItems = cart.reduce(
+        (sum, item) => sum + (item.quantity || 1),
+        0
+      );
       setCartCount(totalItems);
     }
-  };  
+  };
 
   // ******************* FILTER PRODUCTS *******************
   const filteredProducts = products.filter((p) =>
@@ -53,18 +59,25 @@ export default function HomeScreen({ navigation, setCartCount }) {
       <SearchBar value={search} onChange={setSearch} />
 
       {/* ******************** PRODUCTS ******************* */}
-      <FlatList
-        data={filteredProducts}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <ProductCard
-            product={item}
-            onPress={() => navigation.navigate("Detail", { product: item })}
-            onAddToCart={() => handleAdd(item)}
-          />
-        )}
-        contentContainerStyle={{ paddingBottom: 16 }}
-      />
+      {isLoading ? (
+        // Show 6 placeholders while loading
+        Array.from({ length: 6 }).map((_, index) => (
+          <ProductPlaceholder key={index} />
+        ))
+      ) : (
+        <FlatList
+          data={filteredProducts}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <ProductCard
+              product={item}
+              onPress={() => navigation.navigate("Detail", { product: item })}
+              onAddToCart={() => handleAdd(item)}
+            />
+          )}
+          contentContainerStyle={{ paddingBottom: 16 }}
+        />
+      )}
     </Layout>
   );
 }
