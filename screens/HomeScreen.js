@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Text, FlatList, StyleSheet } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Network from "expo-network";
 import Layout from "../components/Layout";
 import ProductCard from "../components/ProductCard";
 import SearchBar from "../components/SearchBar";
@@ -14,21 +15,41 @@ export default function HomeScreen({ navigation, setCartCount }) {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [isOffline, setIsOffline] = useState(false);
 
   // ******************* FETCH PRODUCTS *******************
   // ******************* LOAD PRODUCTS *******************
   useEffect(() => {
-    fetch("https://fakestoreapi.com/products")
-      .then((res) => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
-      })
-      .then(setProducts)
-      .catch((error) => {
-        console.error("Fout bij ophalen producten:", error);
-      })
-      .finally(() => setIsLoading(false));
-  }, []);
+    const fetchProducts = async () => {
+      setIsLoading(true);
+
+      try {
+        const cached = await AsyncStorage.getItem("products");
+        if (cached) {
+          setProducts(JSON.parse(cached));
+        }
+
+        const netState = await Network.getNetworkStateAsync();
+        if (!netState.isInternetReachable) {
+          setIsOffline(true);
+          return;
+        }
+
+        const res = await fetch("https://fakestoreapi.com/products");
+        const data = await res.json();
+        setProducts(data);
+        await AsyncStorage.setItem("products", JSON.stringify(data));
+        setIsOffline(false);
+      } catch (err) {
+        console.warn("Fout bij laden:", err.message);
+        setIsOffline(true);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [isOffline]);
 
   // ******************* ADD TO CART *******************
   const handleAdd = async (product) => {
@@ -52,15 +73,10 @@ export default function HomeScreen({ navigation, setCartCount }) {
   // ******************* RENDER *******************
   return (
     <Layout>
-      {/* ******************** TITLE ******************* */}
       <Text style={styles.title}>My ecom</Text>
-
-      {/* ******************** SEARCHBAR ******************* */}
       <SearchBar value={search} onChange={setSearch} />
 
-      {/* ******************** PRODUCTS ******************* */}
-      {isLoading ? (
-        // Show 6 placeholders while loading
+      {isLoading || isOffline ? (
         Array.from({ length: 6 }).map((_, index) => (
           <ProductPlaceholder key={index} />
         ))
