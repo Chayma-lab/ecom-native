@@ -70,7 +70,7 @@ export default function App() {
         const count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
         setCartCount(count);
       } catch (err) {
-        console.error("Fout bij laden van cart:", err);
+        console.error("Error when loading cart:", err);
       }
     };
 
