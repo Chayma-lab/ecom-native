@@ -5,7 +5,6 @@ import {
   StyleSheet,
   Platform,
   TouchableOpacity,
-  Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import NetInfo from "@react-native-community/netinfo";
@@ -83,15 +82,6 @@ export default function PerformanceTestScreen() {
               : "Waiting..."}
           </Text>
         </View>
-
-        <View style={styles.rowVertical}>
-          <Text style={styles.label}>🖼️ Local Image Test (Offline):</Text>
-          <Image
-            source={require("../assets/banner-image.webp")}
-            style={styles.image}
-            resizeMode="contain"
-          />
-        </View>
       </View>
 
       <TouchableOpacity style={styles.button} onPress={handleTestInteraction}>
@@ -149,13 +139,6 @@ const styles = StyleSheet.create({
     color: "#333",
     marginTop: 4,
     fontWeight: "600",
-  },
-  image: {
-    height: 100,
-    width: "100%",
-    marginTop: 8,
-    borderRadius: 8,
-    backgroundColor: "#fff",
   },
   button: {
     flexDirection: "row",
