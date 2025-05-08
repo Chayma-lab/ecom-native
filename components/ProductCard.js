@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
-  Image,
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { Image } from "react-native-expo-image-cache";
 
 // ******************* COMPONENT *******************
 // ******************* COMPONENT *******************
@@ -31,8 +31,9 @@ export default function ProductCard({ product, onPress, onAddToCart }) {
             />
           )}
           <Image
-            source={{ uri: product.image }}
+            uri={product.image}
             style={styles.image}
+            resizeMode="contain"
             onLoadEnd={() => setLoading(false)}
           />
         </View>
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
   // ******************* CARD *******************
   card: {
     borderRadius: 16,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#fff",
     margin: 10,
     overflow: "hidden",
     elevation: 2,
@@ -85,7 +86,6 @@ const styles = StyleSheet.create({
   imageWrapper: {
     width: "100%",
     height: 200,
-    backgroundColor: "#fff",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -96,7 +96,6 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: 200,
-    resizeMode: "contain",
     backgroundColor: "#fff",
   },
   // ******************* PRODUCT INFO *******************
@@ -110,7 +109,7 @@ const styles = StyleSheet.create({
   },
   // ******************* PRODUCT CHIP *******************
   chip: {
-    backgroundColor: "#e0e0e0",
+    backgroundColor: "#f0eefe",
     alignSelf: "flex-start",
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -119,7 +118,7 @@ const styles = StyleSheet.create({
   },
   chipText: {
     fontSize: 12,
-    color: "#444",
+    color: "#4B2E83",
   },
   // ******************* PRODUCT PRICE + RATING *******************
   price: {
@@ -134,17 +133,18 @@ const styles = StyleSheet.create({
   },
   rating: {
     marginLeft: 4,
-    color: "darkred",
+    color: "gray",
   },
   // ******************* ADD TO CART BUTTON *******************
   cartButton: {
     flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
     backgroundColor: "#4B2E83",
     padding: 12,
-    borderTopWidth: 1,
-    borderTopColor: "#ddd",
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 8,
+    marginBottom: 12,
   },
   cartButtonText: {
     color: "#FFFFFF",

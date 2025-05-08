@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import {
   View,
   Text,
-  Image,
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { Image } from "react-native-expo-image-cache";
 
 // ******************* COMPONENT *******************
 // ******************* COMPONENT *******************
@@ -26,13 +26,12 @@ export default function CartItem({
       {/* ******************* PRODUCT IMAGE + LOADER ******************* */}
       <View style={styles.imageWrapper}>
         {loading && (
-          <View style={styles.loader}>
-            <ActivityIndicator size="small" color="#999" />
-          </View>
+          <ActivityIndicator size="small" color="#999" style={styles.loader} />
         )}
         <Image
-          source={{ uri: item.image }}
+          uri={item.image}
           style={styles.image}
+          resizeMode="contain"
           onLoadEnd={() => setLoading(false)}
         />
       </View>
@@ -80,10 +79,9 @@ const styles = StyleSheet.create({
   },
   // ******************* PRODUCT IMAGE *******************
   image: {
-    width: 100,
-    height: 100,
+    width: 80,
+    height: 80,
     resizeMode: "contain",
-    backgroundColor: "#fff",
     position: "absolute",
   },
   // ******************* PRODUCT INFO *******************
@@ -122,6 +120,8 @@ const styles = StyleSheet.create({
   imageWrapper: {
     width: 100,
     height: 100,
+    margin: 2,
+    borderRadius: 12,
     backgroundColor: "#fff",
     justifyContent: "center",
     alignItems: "center",

@@ -1,7 +1,14 @@
-import React from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Image } from "react-native-expo-image-cache";
 import Layout from "../components/Layout";
 import { addToCart } from "../utils/addToCart";
 import { navigateTo } from "../utils/navigation";
@@ -11,6 +18,7 @@ export default function DetailScreen({ route, setCartCount }) {
   // ******************* PRODUCT DATA *******************
   // ******************* PRODUCT DATA *******************
   const { product } = route.params;
+  const [isLoading, setIsLoading] = useState(true);
 
   // ******************* ADD TO CART *******************
   const handleAdd = async () => {
@@ -18,7 +26,10 @@ export default function DetailScreen({ route, setCartCount }) {
     if (success) {
       const saved = await AsyncStorage.getItem("cart");
       const cart = saved ? JSON.parse(saved) : [];
-      const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+      const totalItems = cart.reduce(
+        (sum, item) => sum + (item.quantity || 1),
+        0
+      );
       setCartCount(totalItems);
     }
   };
@@ -28,36 +39,47 @@ export default function DetailScreen({ route, setCartCount }) {
     // ******************* CONTAINER *******************
     // ******************* CONTAINER *******************
     <Layout contentContainerStyle={styles.container}>
-      {/* ******************* PRODUCT IMAGE ******************* */}
-      <Image source={{ uri: product.image }} style={styles.image} />
-
-      {/* ******************* PRODUCT INFO ******************* */}
-      <View style={styles.content}>
-        <Text style={styles.title}>{product.title}</Text>
-
-        <View style={styles.chip}>
-          <Text style={styles.chipText}>{product.category}</Text>
+        <View style={styles.imageWrapper}>
+          {isLoading && (
+            <ActivityIndicator
+              size="small"
+              color="#999"
+              style={styles.loader}
+            />
+          )}
+          <Image
+            uri={product.image}
+            style={styles.image}
+            resizeMode="contain"
+            onLoadEnd={() => setIsLoading(false)}
+          />
         </View>
 
-        <Text style={styles.price}>€{product.price}</Text>
-        <Text style={styles.description}>{product.description}</Text>
+        <View style={styles.content}>
+          <Text style={styles.title}>{product.title}</Text>
 
-        {/* ******************* BUTTONS ******************* */}
-        <TouchableOpacity style={styles.button} onPress={handleAdd}>
-          <Ionicons name="cart-outline" size={18} color="#fff" />
-          <Text style={styles.buttonText}>Put it in the bag</Text>
-        </TouchableOpacity>
+          <View style={styles.chip}>
+            <Text style={styles.chipText}>{product.category}</Text>
+          </View>
 
-        <TouchableOpacity
-          style={[styles.button, styles.secondaryButton]}
-          onPress={() => navigateTo("Cart")}
-        >
-          <Ionicons name="bag-outline" size={18} color="#4B2E83" />
-          <Text style={[styles.buttonText, { color: "#4B2E83" }]}>
-            See what's in my bag
-          </Text>
-        </TouchableOpacity>
-      </View>
+          <Text style={styles.price}>€{product.price}</Text>
+          <Text style={styles.description}>{product.description}</Text>
+
+          <TouchableOpacity style={styles.button} onPress={handleAdd}>
+            <Ionicons name="cart-outline" size={18} color="#fff" />
+            <Text style={styles.buttonText}>Put it in the bag</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.button, styles.secondaryButton]}
+            onPress={() => navigateTo("Cart")}
+          >
+            <Ionicons name="bag-outline" size={18} color="#4B2E83" />
+            <Text style={[styles.buttonText, { color: "#4B2E83" }]}>
+              See what's in my bag
+            </Text>
+          </TouchableOpacity>
+        </View>
     </Layout>
   );
 }
@@ -76,7 +98,6 @@ const styles = StyleSheet.create({
   image: {
     width: 250,
     height: 250,
-    resizeMode: "contain",
     backgroundColor: "#fff",
     alignSelf: "center",
   },
@@ -91,16 +112,16 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   chip: {
-    backgroundColor: "#e0e0e0",
+    backgroundColor: "#f0eefe",
     alignSelf: "flex-start",
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
-    marginBottom: 12,
+    marginBottom: 8,
   },
   chipText: {
     fontSize: 12,
-    color: "#444",
+    color: "#4B2E83",
   },
   price: {
     fontSize: 20,
