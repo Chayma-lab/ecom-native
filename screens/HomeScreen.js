@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, FlatList, StyleSheet } from "react-native";
+import { Text, FlatList, StyleSheet, ScrollView } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Network from "expo-network";
 import Layout from "../components/Layout";
@@ -24,17 +24,20 @@ export default function HomeScreen({ navigation, setCartCount }) {
       setIsLoading(true);
 
       try {
+        // Show cached products if available
         const cached = await AsyncStorage.getItem("products");
         if (cached) {
           setProducts(JSON.parse(cached));
         }
 
+        // Check network state
         const netState = await Network.getNetworkStateAsync();
         if (!netState.isInternetReachable) {
           setIsOffline(true);
-          return;
+          return; // ↩️ Stop hier als offline
         }
 
+        // If online, fetch products from API
         const res = await fetch("https://fakestoreapi.com/products");
         const data = await res.json();
         setProducts(data);
@@ -49,7 +52,7 @@ export default function HomeScreen({ navigation, setCartCount }) {
     };
 
     fetchProducts();
-  }, [isOffline]);
+  }, []);
 
   // ******************* ADD TO CART *******************
   const handleAdd = async (product) => {
@@ -76,10 +79,12 @@ export default function HomeScreen({ navigation, setCartCount }) {
       <Text style={styles.title}>My ecom</Text>
       <SearchBar value={search} onChange={setSearch} />
 
-      {isLoading || isOffline ? (
-        Array.from({ length: 6 }).map((_, index) => (
-          <ProductPlaceholder key={index} />
-        ))
+      {isLoading? (
+        <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 16 }}>
+          {Array.from({ length: 6 }).map((_, index) => (
+            <ProductPlaceholder key={index} />
+          ))}
+        </ScrollView>
       ) : (
         <FlatList
           data={filteredProducts}
