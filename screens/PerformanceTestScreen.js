@@ -41,7 +41,7 @@ export default function PerformanceTestScreen() {
           <Text style={styles.value}>
             {homeLoadTime !== null
               ? `${homeLoadTime} ms`
-              : "Is not yet measured"}
+              : "?"}
           </Text>
         </View>
 
@@ -50,7 +50,7 @@ export default function PerformanceTestScreen() {
           <Text style={styles.value}>
             {homeAddToCartTime !== null
               ? `${homeAddToCartTime} ms`
-              : "Is not yet measured"}
+              : "?"}
           </Text>
         </View>
 
