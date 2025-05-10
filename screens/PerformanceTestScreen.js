@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useFocusEffect } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { View, Text, StyleSheet, Platform } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Layout from "../components/Layout";
 
@@ -26,6 +27,18 @@ export default function PerformanceTestScreen() {
     fetchHomeMetrics();
   }, []);
 
+  useFocusEffect(
+    useCallback(() => {
+      const fetchAddToCartTime = async () => {
+        const value = await AsyncStorage.getItem("addToCartTime");
+        if (value) {
+          setHomeAddToCartTime(Number(value));
+        }
+      };
+
+      fetchAddToCartTime();
+    }, [])
+  );
   return (
     <Layout style={styles.container}>
       <Text style={styles.title}>Performance Results</Text>
@@ -39,18 +52,14 @@ export default function PerformanceTestScreen() {
         <View style={styles.row}>
           <Text style={styles.label}>🖥️ Home load time (FCP~LCP):</Text>
           <Text style={styles.value}>
-            {homeLoadTime !== null
-              ? `${homeLoadTime} ms`
-              : "?"}
+            {homeLoadTime !== null ? `${homeLoadTime} ms` : "?"}
           </Text>
         </View>
 
         <View style={styles.row}>
           <Text style={styles.label}>🛒 Add to cart reaction time:</Text>
           <Text style={styles.value}>
-            {homeAddToCartTime !== null
-              ? `${homeAddToCartTime} ms`
-              : "?"}
+            {homeAddToCartTime !== null ? `${homeAddToCartTime} ms` : "-"}
           </Text>
         </View>
 
