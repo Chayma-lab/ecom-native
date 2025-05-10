@@ -26,14 +26,15 @@ Naast performance testing biedt deze app ook een volledige winkelervaring met ar
 
 De app bevat een speciaal testscherm dat 6 belangrijke performance-indicatoren meet — ontworpen om een vergelijking te maken met Lighthouse-metrics van de PWA-versie.
 
-| Metriek                          | Beschrijving                                                                 |
-|----------------------------------|------------------------------------------------------------------------------|
-| 🚀 **App Startup Time**          | Tijd tussen app-lancering en eerste zichtbare scherm                        |
-| ⚡ **Button Reaction Time (INP)**| Tijd tussen gebruikersklik en visuele respons                               |
-| 📊 **System Response Time (SRT)**| Som van Startup Time + INP (vergelijkbaar met TTFB + INP in Lighthouse)     |
-| 📡 **Offline Mode Status**       | Detecteert of het toestel zich in offline-modus bevindt                     |
-| 🖼️ **Offline Image Test**        | Test of een lokale afbeelding zichtbaar blijft zonder internetverbinding    |
-| 💻 **Platform Info**             | Toont op welk platform de test uitgevoerd wordt (bv. Android of iOS)       |
+### 📊 Performance Metrics (Native App)
+
+| Metriek                             | Beschrijving                                                                 |
+|-------------------------------------|------------------------------------------------------------------------------|
+| 🖥️ **Home Load Time (FCP~LCP)**      | Tijd tussen het openen van de Home-pagina en het zichtbaar worden van de producten |
+| 🛒 **Add to Cart Reaction Time**     | Tijd tussen het klikken op 'Add to cart' en het toevoegen aan het winkelmandje |
+| 🌐 **Offline tijdens Home Load**     | Geeft aan of de Home-pagina geladen werd zonder internetverbinding          |
+| 📦 **Aantal producten geladen**      | Toont hoeveel producten effectief zichtbaar zijn (online of uit cache)       |
+| 📱 **Platform**                      | Geeft aan of de app draaide op Android of iOS                               |
 
 ---
 
