@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Text, FlatList, StyleSheet, ScrollView } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Network from "expo-network";
+import NetInfo from "@react-native-community/netinfo";
 import Layout from "../components/Layout";
 import ProductCard from "../components/ProductCard";
 import SearchBar from "../components/SearchBar";
@@ -25,7 +26,6 @@ export default function HomeScreen({ navigation, setCartCount }) {
       setIsLoading(true);
 
       try {
-        // Show cached products if available
         const cached = await AsyncStorage.getItem("products");
         if (cached) {
           const parsed = JSON.parse(cached);
@@ -42,14 +42,12 @@ export default function HomeScreen({ navigation, setCartCount }) {
           );
         }
 
-        // Check network state
         const netState = await Network.getNetworkStateAsync();
         if (!netState.isInternetReachable) {
           setIsOffline(true);
-          return; // Stop hier als offline
+          return;
         }
 
-        // If online, fetch products from API
         const res = await fetch("https://fakestoreapi.com/products");
         const data = await res.json();
         setProducts(data);
@@ -71,7 +69,17 @@ export default function HomeScreen({ navigation, setCartCount }) {
       }
     };
 
+    // Initieel laden
     fetchProducts();
+
+    // Refetchen wanneer netwerk terugkomt
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      if (state.isInternetReachable) {
+        fetchProducts(); // opnieuw fetchen bij herverbinden
+      }
+    });
+
+    return () => unsubscribe(); // cleanup
   }, []);
 
   // ******************* ADD TO CART *******************
