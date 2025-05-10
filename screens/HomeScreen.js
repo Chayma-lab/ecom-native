@@ -16,6 +16,7 @@ export default function HomeScreen({ navigation, setCartCount }) {
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isOffline, setIsOffline] = useState(false);
+  const homeStart = Date.now();
 
   // ******************* FETCH PRODUCTS *******************
   // ******************* LOAD PRODUCTS *******************
@@ -27,14 +28,25 @@ export default function HomeScreen({ navigation, setCartCount }) {
         // Show cached products if available
         const cached = await AsyncStorage.getItem("products");
         if (cached) {
-          setProducts(JSON.parse(cached));
+          const parsed = JSON.parse(cached);
+          setProducts(parsed);
+          await AsyncStorage.setItem(
+            "homeProductCount",
+            parsed.length.toString()
+          );
+          await AsyncStorage.setItem("homeOffline", JSON.stringify(true));
+          const homeEnd = Date.now();
+          await AsyncStorage.setItem(
+            "homeLoadTime",
+            (homeEnd - homeStart).toString()
+          );
         }
 
         // Check network state
         const netState = await Network.getNetworkStateAsync();
         if (!netState.isInternetReachable) {
           setIsOffline(true);
-          return; // ↩️ Stop hier als offline
+          return; // Stop hier als offline
         }
 
         // If online, fetch products from API
@@ -42,6 +54,14 @@ export default function HomeScreen({ navigation, setCartCount }) {
         const data = await res.json();
         setProducts(data);
         await AsyncStorage.setItem("products", JSON.stringify(data));
+        await AsyncStorage.setItem("homeProductCount", data.length.toString());
+        await AsyncStorage.setItem("homeOffline", JSON.stringify(false));
+        const homeEnd = Date.now();
+        await AsyncStorage.setItem(
+          "homeLoadTime",
+          (homeEnd - homeStart).toString()
+        );
+
         setIsOffline(false);
       } catch (err) {
         console.warn("Fout bij laden:", err.message);
@@ -56,8 +76,13 @@ export default function HomeScreen({ navigation, setCartCount }) {
 
   // ******************* ADD TO CART *******************
   const handleAdd = async (product) => {
+    const start = Date.now();
     const success = await addToCart(product);
+    const end = Date.now();
+
     if (success) {
+      await AsyncStorage.setItem("addToCartTime", (end - start).toString());
+
       const saved = await AsyncStorage.getItem("cart");
       const cart = saved ? JSON.parse(saved) : [];
       const totalItems = cart.reduce(
@@ -79,7 +104,7 @@ export default function HomeScreen({ navigation, setCartCount }) {
       <Text style={styles.title}>My ecom</Text>
       <SearchBar value={search} onChange={setSearch} />
 
-      {isLoading? (
+      {isLoading ? (
         <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 16 }}>
           {Array.from({ length: 6 }).map((_, index) => (
             <ProductPlaceholder key={index} />

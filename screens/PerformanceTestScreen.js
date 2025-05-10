@@ -1,93 +1,77 @@
-import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Platform,
-  TouchableOpacity,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import NetInfo from "@react-native-community/netinfo";
+import React, { useEffect, useState, useFocusEffect } from "react";
+import { View, Text, StyleSheet, Platform } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Layout from "../components/Layout";
 
-// ******************* DATA *******************
-// ******************* DATA *******************
-// ******************* DATA *******************
-const startTime = Date.now();
-
 export default function PerformanceTestScreen() {
-  const [startupTime, setStartupTime] = useState(null);
-  const [interactionTime, setInteractionTime] = useState(null);
-  const [offline, setOffline] = useState(false);
+  const [homeLoadTime, setHomeLoadTime] = useState(null);
+  const [homeAddToCartTime, setHomeAddToCartTime] = useState(null);
+  const [homeProductCount, setHomeProductCount] = useState(null);
+  const [homeOfflineStatus, setHomeOfflineStatus] = useState(null);
 
   useEffect(() => {
-    const now = Date.now();
-    setStartupTime(now - startTime);
+    const fetchHomeMetrics = async () => {
+      const load = await AsyncStorage.getItem("homeLoadTime");
+      const addToCart = await AsyncStorage.getItem("addToCartTime");
+      const productCount = await AsyncStorage.getItem("homeProductCount");
+      const offlineStatus = await AsyncStorage.getItem("homeOffline");
 
-    const unsubscribe = NetInfo.addEventListener((state) => {
-      setOffline(!state.isConnected);
-    });
+      if (load) setHomeLoadTime(Number(load));
+      if (addToCart) setHomeAddToCartTime(Number(addToCart));
+      if (productCount) setHomeProductCount(Number(productCount));
+      if (offlineStatus !== null)
+        setHomeOfflineStatus(JSON.parse(offlineStatus));
+    };
 
-    return () => unsubscribe();
+    fetchHomeMetrics();
   }, []);
-
-  // ******************* INTERACTION *******************
-  const handleTestInteraction = () => {
-    const before = Date.now();
-    setTimeout(() => {
-      const after = Date.now();
-      setInteractionTime(after - before);
-    }, 0);
-  };
-
-  // ******************* SRT *******************
-  const srt =
-    startupTime !== null && interactionTime !== null
-      ? startupTime + interactionTime
-      : null;
 
   return (
     <Layout style={styles.container}>
-      <Text style={styles.title}>Performance Test</Text>
+      <Text style={styles.title}>Performance Results</Text>
 
       <View style={styles.card}>
-        {/* ******************* PERFORMANCE DATA ******************* */}
         <View style={styles.row}>
-          <Text style={styles.label}>📦 Platform:</Text>
+          <Text style={styles.label}>📱 Platform:</Text>
           <Text style={styles.value}>{Platform.OS}</Text>
         </View>
 
         <View style={styles.row}>
-          <Text style={styles.label}>🚀 App startup time:</Text>
-          <Text style={styles.value}>{startupTime} ms</Text>
-        </View>
-
-        <View style={styles.row}>
-          <Text style={styles.label}>⚡ Button reaction time (INP):</Text>
+          <Text style={styles.label}>🖥️ Home load time (FCP~LCP):</Text>
           <Text style={styles.value}>
-            {interactionTime !== null ? `${interactionTime} ms` : "Waiting..."}
+            {homeLoadTime !== null
+              ? `${homeLoadTime} ms`
+              : "Is not yet measured"}
           </Text>
         </View>
 
         <View style={styles.row}>
-          <Text style={styles.label}>📡 Offline mode:</Text>
-          <Text style={styles.value}>{offline ? "Yes" : "No"}</Text>
+          <Text style={styles.label}>🛒 Add to cart reaction time:</Text>
+          <Text style={styles.value}>
+            {homeAddToCartTime !== null
+              ? `${homeAddToCartTime} ms`
+              : "Is not yet measured"}
+          </Text>
         </View>
 
-        <View style={styles.rowVertical}>
-          <Text style={styles.label}>📊 System Response Time (SRT):</Text>
-          <Text style={styles.valueBlock}>
-            {srt !== null
-              ? `${startupTime} + ${interactionTime} = ${srt} ms`
-              : "Waiting..."}
+        <View style={styles.row}>
+          <Text style={styles.label}>🌐 Offline when Home-load:</Text>
+          <Text style={styles.value}>
+            {homeOfflineStatus === null
+              ? "?"
+              : homeOfflineStatus
+              ? "Yes"
+              : "No"}
+          </Text>
+        </View>
+
+        <View style={styles.row}>
+          <Text style={styles.label}>📦 Number of products loaded:</Text>
+          <Text style={styles.value}>
+            {homeProductCount !== null ? homeProductCount : "?"}
           </Text>
         </View>
       </View>
-
-      <TouchableOpacity style={styles.button} onPress={handleTestInteraction}>
-        <Ionicons name="sync" size={18} color="#fff" />
-        <Text style={styles.buttonText}>Test reaction time</Text>
-      </TouchableOpacity>
     </Layout>
   );
 }
@@ -130,29 +114,5 @@ const styles = StyleSheet.create({
   value: {
     fontSize: 16,
     color: "#333",
-  },
-  rowVertical: {
-    marginTop: 16,
-  },
-  valueBlock: {
-    fontSize: 16,
-    color: "#333",
-    marginTop: 4,
-    fontWeight: "600",
-  },
-  button: {
-    flexDirection: "row",
-    backgroundColor: "#4B2E83",
-    padding: 12,
-    borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 8,
-    marginBottom: 12,
-  },
-  buttonText: {
-    color: "#fff",
-    fontWeight: "600",
-    marginLeft: 6,
   },
 });
