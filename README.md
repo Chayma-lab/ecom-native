@@ -1,5 +1,7 @@
 # 📱 Native Performance Test App (React Native)
 
+👉 [Download de native Android-app (.apk)](https://github.com/Chayma-lab/ecom-native/releases/tag/v1.0)
+
 Deze app is ontwikkeld als onderdeel van een bachelorproef die onderzoekt in welke mate **Progressive Web Apps (PWA’s)** een alternatief kunnen zijn voor **native apps** binnen internationale e-commerce platformen. De focus ligt op **gebruikservaring, prestaties en offline gedrag**.
 
 Naast performance testing biedt deze app ook een volledige winkelervaring met artikels, een cart en zoekfunctionaliteit.
